@@ -46,6 +46,7 @@ The application features:
 **NOTE**:
 * On Windows with **chocolatey** (https://chocolatey.org/), do as an administrator:
 
+1. Install Chocolatey: https://chocolatey.org/install
 ```powershell
 choco install -y nodejs-lts mongodb python postman robot3t microsoft-build-tools
 ```
@@ -69,14 +70,16 @@ brew install node mongodb-community@4.4 python@3.9 postman robo-3t
 ##### Manually
 
 
-Windows:
-1. Go into Windows->Services
-2. Stop the MongoDb Service
 
 ```shell
 mongod --port <port> --dbpath <path> --replSet <replcaSetName>
 ```
 For instance Windows:
+
+Windows:
+1. Go into Windows->Services
+2. Stop the MongoDb Service
+3. Then execute the line below
 ```shell
 mongod --port 27017 --dbpath C:\Temp\MongoDB\EV-Server --replSet "rs0" --logpath=C:\Temp\MongoDB\EV-Server\log.txt
 
