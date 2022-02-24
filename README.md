@@ -50,6 +50,9 @@ The application features:
 choco install -y nodejs-lts mongodb python postman robot3t microsoft-build-tools
 ```
 
+Add the MongoDb installation path to the %PATH% env variable:
+C:\Program Files\MongoDB\Server\5.2\bin
+
 * On Mac OSX with **Homebrew** (https://brew.sh/), do:
 
 ```shell
@@ -65,12 +68,24 @@ brew install node mongodb-community@4.4 python@3.9 postman robo-3t
 
 ##### Manually
 
+
+Windows:
+1. Go into Windows->Services
+2. Stop the MongoDb Service
+
 ```shell
 mongod --port <port> --dbpath <path> --replSet <replcaSetName>
 ```
-For instance:
+For instance Windows:
+```shell
+mongod --port 27017 --dbpath C:\Temp\MongoDB\EV-Server --replSet "rs0" --logpath=C:\Temp\MongoDB\EV-Server\log.txt
+
+```
+
+For instance Linux:
 ```shell
 mongod --port 27017 --dbpath "/var/lib/mongodb" --replSet "rs0"
+
 ```
 
 ##### As a Windows service
@@ -114,7 +129,7 @@ Create Admin User on Admin schema:
   use admin
   db.createUser({
     user: "evse-admin",
-    pwd: "<YourPassword>",
+    pwd: "<YourPassword>", #codementor#72!
     roles: [
       "read",
       "readWrite",
