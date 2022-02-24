@@ -47,12 +47,10 @@ The application features:
 * On Windows with **chocolatey** (https://chocolatey.org/), do as an administrator:
 
 1. Install Chocolatey: https://chocolatey.org/install
+2. Install Open SSL for Windows, scroll down to ["Complete package, except sources"](http://gnuwin32.sourceforge.net/packages/openssl.htm()
 ```powershell
 choco install -y nodejs-lts mongodb python postman robot3t microsoft-build-tools
 ```
-
-Add the MongoDb installation path to the %PATH% env variable:
-C:\Program Files\MongoDB\Server\5.2\bin
 
 * On Mac OSX with **Homebrew** (https://brew.sh/), do:
 
@@ -63,12 +61,23 @@ brew install node mongodb-community@4.4 python@3.9 postman robo-3t
 
 * Follow the rest of the setup below
 
+
+#### Add Mongo and OpenSSL to the PATH env variable (windows)
+
+Be sure that the MongoDb and OpenSSL installation path is added to the `%PATH%` environment variable:
++ `C:\Program Files\MongoDB\Server\5.2\bin`
++ `C:\Program Files (x86)\GnuWin32\bin\`
+
+1. Open windows search and type "env"
+![image](https://user-images.githubusercontent.com/6730815/155603243-d31073fc-04c1-43ea-94a3-349b0be2e97b.png)
+2. ![image](https://user-images.githubusercontent.com/6730815/155603442-827da70c-72da-4007-878c-7f35acfa8c35.png)
+
+
 ## The Database
 
 #### Start MongoDB
 
 ##### Manually
-
 
 
 ```shell
@@ -79,10 +88,11 @@ For instance Windows:
 Windows:
 1. Go into Windows->Services
 2. Stop the MongoDb Service
+3. Create this empty folder: `C:\temp\MongoDB\EV-Server`
 3. Then execute the line below
+
 ```shell
 mongod --port 27017 --dbpath C:\Temp\MongoDB\EV-Server --replSet "rs0" --logpath=C:\Temp\MongoDB\EV-Server\log.txt
-
 ```
 
 For instance Linux:
@@ -91,24 +101,12 @@ mongod --port 27017 --dbpath "/var/lib/mongodb" --replSet "rs0"
 
 ```
 
-##### As a Windows service
-
-Add to /path/to/mongod.cfg (open -a TextEdit /usr/local/etc/mongod.cfg)
-```yaml
-...
-replication:
-  replSetName: "rs0"
-...
-```
-Restart the MongoDB service with Powershell as an administrator:
-
-```powershell
-Restart-Service -Name "MongoDB"
-```
-
 #### Activate the Replica Set
 
 Activate the replica set:
+
+1. Open a new command line
+2. Execute the lines below
 
 - Start the Mongo client
 ```shell
@@ -132,7 +130,7 @@ Create Admin User on Admin schema:
   use admin
   db.createUser({
     user: "evse-admin",
-    pwd: "<YourPassword>", #codementor#72!
+    pwd: "<YourPassword>", 
     roles: [
       "read",
       "readWrite",
@@ -158,30 +156,26 @@ This will restart MongoDB and will accept only authenticated connections from no
 mongod --auth --port <port> --dbpath <path> --replSet <replcaSetName>
 ```
 
-##### As a Windows service
-
-Add to /path/to/mongod.cfg:
-```yaml
-...
-security:
-  authorization: enabled
-...
-```
-
-Restart the MongoDB service with Powershell as an administrator:
-
-```powershell
-Restart-Service -Name "MongoDB"
+Example (windows)
+1. Close the old command line where you started first the mongoDB
+2. Open a new command line
+3. Generate a new auth certificate `openssl rand -base64 756 > C:\temp\MongoDB\keyFileMongoDb.key`
+3. Execute the line below
+```shell
+mongod --auth --keyFile C:\temp\MongoDB\keyFileMongoDb.key --port 27017 --dbpath C:\Temp\MongoDB\EV-Server --replSet "rs0" --logpath=C:\Temp\MongoDB\EV-Server\log.txt
 ```
 
 #### Create the Application User
 
 Connect using the admin user
 
+1. Open the command line
+2. Execute the line below
 ```shell
 mongo -u evse-admin -p <YourPassword> --authenticationDatabase admin
 ```
 
+1. Execute in the same commandline the line below:
 Create Application User on EVSE schema
 ```js
   use evse
