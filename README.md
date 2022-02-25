@@ -463,6 +463,10 @@ All charging stations supporting OCPP-J and OCPP-S version 1.5 and 1.6 protocols
 
 Start the application:
 
+1. Navigate to the your local repository "Ev-Server"
+2. If you never started it before then install the npm packages first with `npm install`
+3. Then run the command below
+
 ```shell
 npm run start
 ```
